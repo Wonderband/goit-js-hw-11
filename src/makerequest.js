@@ -1,5 +1,7 @@
 import axios from 'axios';
 import createGallery from './templates/image-card.hbs';
+import Notiflix from 'notiflix';
+
 export class GetDataFromPixabay {
 
     constructor(query, pageNumber, btn, galleryEl) {
