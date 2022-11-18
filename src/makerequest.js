@@ -2,8 +2,8 @@ import axios from 'axios';
 import createGallery from './templates/image-card.hbs';
 import Notiflix from 'notiflix';
 
+const perPage = 40;
 export class GetDataFromPixabay {
-
     constructor(query, pageNumber, btn, galleryEl) {
         this.url = "https://pixabay.com/api/";        
         this.config = new URLSearchParams({
@@ -12,27 +12,26 @@ export class GetDataFromPixabay {
             orientation: "horizontal",
             safesearch: true,
             q: query,
-            per_page: 4,
-            
+            per_page: perPage,            
         });  
         this.page = pageNumber;
         this.moreBtn = btn; 
         this.gallery = galleryEl;
     }
-    createGalleryPage() {
-        console.log(this.page);
-        console.log(this.config);
+    createGalleryPage() {        
         const pageTempl = `page=${this.page}`;
         return getPhotos(`${this.url}?${pageTempl}&${this.config}`)
         .then(responce => {
-                const resultArray = responce.data.hits;
+            console.log(responce);
+                const resultArray = responce.data.hits;                
                 if (!resultArray.length) {
                     Notiflix.Notify.failure
                     ("Sorry, there are no images matching your search query. Please try again.");
                     this.moreBtn['hidden'] = true;
                     return;        
                 }    
-                this.moreBtn['hidden'] = false;     
+                this.moreBtn['hidden'] = false;  
+                this.totalPages = Math.ceil(responce.data.totalHits / perPage);                 
                 return resultArray;        
             })
             .then(data => {                    

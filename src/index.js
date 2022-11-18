@@ -1,13 +1,13 @@
-import Notiflix from 'notiflix';
-import axios from 'axios';
-import createGallery from './templates/image-card.hbs';
+// import Notiflix from 'notiflix';
+// import axios from 'axios';
+// import createGallery from './templates/image-card.hbs';
 import { GetDataFromPixabay } from './makerequest';
-
 
 
 const searchForm = document.querySelector('#search-form');
 const galleryEl = document.querySelector('.gallery');
 const moreBtn = document.querySelector('.load-more');
+
 searchForm.addEventListener('submit', getNewImages);
 moreBtn.addEventListener('click', getNextImages);
 
@@ -17,7 +17,7 @@ let getdata;
 function getNewImages(e) {
     e.preventDefault();   
     const searchQuery = e.currentTarget.elements.searchQuery.value.trim();
-    page = 1;
+    page = 1;    
     galleryEl.innerHTML = '';
     // const dataObj = new GetDataFromPixabay(searchQuery, page)
     // console.log(dataObj);
@@ -27,8 +27,13 @@ function getNewImages(e) {
 
 function getNextImages(e) {
     page += 1;
+    if (page > getdata.totalPages) {
+        Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
+        moreBtn['hidden'] = true;
+        return;
+    }
     getdata.page = page;
-    console.log(getdata.config);
+    console.log(getdata.config);    
     getdata.createGalleryPage();
 }
 
