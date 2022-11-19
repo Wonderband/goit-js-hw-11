@@ -18,7 +18,9 @@ function getNewImages(e) {
     galleryEl.innerHTML = '';  
     moreBtn['hidden'] = true;
     getdata = new GetDataFromPixabay(searchQuery, page, moreBtn, galleryEl);
-    getdata.createGalleryPage();
+    getdata.createGalleryPage().then(res => {        
+        if (res) Notiflix.Notify.success(`Hooray! We found ${getdata.totalHits} images.`);
+    });    
 }
 
 function getNextImages(e) {
@@ -27,7 +29,7 @@ function getNextImages(e) {
         Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
         moreBtn['hidden'] = true;
         return;
-    }
+    }    
     getdata.page = page;     
     getdata.createGalleryPage();
 }

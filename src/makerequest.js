@@ -1,6 +1,9 @@
 import axios from 'axios';
 import createGallery from './templates/image-card.hbs';
 import Notiflix from 'notiflix';
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
+
 
 const perPage = 40;
 export class GetDataFromPixabay {
@@ -24,20 +27,23 @@ export class GetDataFromPixabay {
         .then(responce => {            
             const resultArray = responce.data.hits;                
             if (!resultArray.length) {
-                Notiflix.Notify.failure
-                ("Sorry, there are no images matching your search query. Please try again.");
-                this.moreBtn['hidden'] = true;
-                return;        
+                this.moreBtn['hidden'] = true;                
+                throw new Error("Sorry, there are no images matching your search query. Please try again.");                    
             }    
             this.moreBtn['hidden'] = false;  
-            this.totalPages = Math.ceil(responce.data.totalHits / perPage);                 
+            this.totalHits = responce.data.totalHits;
+            this.totalPages = Math.ceil(this.totalHits / perPage);                          
             return resultArray;        
             })
         .then(photos => {                    
-            this.gallery.insertAdjacentHTML("beforeend", createGallery(photos));                    
+            this.gallery.insertAdjacentHTML("beforeend", createGallery(photos));
+            const lightbox = new SimpleLightbox('.gallery a', 
+            {captions: true, captionsData: 'alt', captionDelay: 250});
+            return true;                   
             })
-        .catch(err => {Notiflix.Notify.failure
-            (`${err.message}`);            
+        .catch(err => {            
+            Notiflix.Notify.failure(`${err.message}`);  
+            return false;          
         });
     }    
 }
