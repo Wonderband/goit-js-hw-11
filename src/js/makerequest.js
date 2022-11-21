@@ -22,9 +22,9 @@ export class GetDataFromPixabay {
         this.gallery = galleryEl;
     }
 
-    createGalleryPage() {        
-        return getPhotos(`${this.url}?page=${this.page}&${this.config}`)
-        .then(responce => {            
+    async createGalleryPage() { 
+        try {
+            const responce = await getPhotos(`${this.url}?page=${this.page}&${this.config}`);                   
             const resultArray = responce.data.hits;                
             if (!resultArray.length) {
                 this.moreBtn['hidden'] = true;                
@@ -32,20 +32,16 @@ export class GetDataFromPixabay {
             }    
             this.moreBtn['hidden'] = false;  
             this.totalHits = responce.data.totalHits;
-            this.totalPages = Math.ceil(this.totalHits / perPage);                          
-            return resultArray;        
-            })
-        .then(photos => {                    
-            this.gallery.insertAdjacentHTML("beforeend", createGallery(photos));
+            this.totalPages = Math.ceil(this.totalHits / perPage);                       
+            this.gallery.insertAdjacentHTML("beforeend", createGallery(resultArray));
             const lightbox = new SimpleLightbox('.gallery a', {
                 captions: true, captionsData: 'alt', captionDelay: 250
             });
-            return true;                   
-            })
-        .catch(err => {            
+            return true;
+        } catch(err) {            
             Notiflix.Notify.failure(`${err.message}`);  
             return false;          
-        });
+        };
     }
 }
 

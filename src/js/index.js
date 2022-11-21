@@ -10,6 +10,7 @@ moreBtn.addEventListener('click', getNextImages);
 
 let page = 1;
 let getdata;
+let oldSearchQuery = ''; 
 
 const params = {
     root: null,
@@ -18,20 +19,21 @@ const params = {
 }
 const io = new IntersectionObserver(scrollPage, params);
 
-function getNewImages(e) {
-    e.preventDefault();   
+async function getNewImages(e) {
+    e.preventDefault();     
     const searchQuery = e.currentTarget.elements.searchQuery.value.trim();
+    if (oldSearchQuery === searchQuery) return;
     page = 1;    
     galleryEl.innerHTML = '';  
     moreBtn['hidden'] = true;
+    oldSearchQuery = searchQuery;
     getdata = new GetDataFromPixabay(searchQuery, page, moreBtn, galleryEl);
-    getdata.createGalleryPage().then(res => {             
-        if (res) Notiflix.Notify.success(`Hooray! We found ${getdata.totalHits} images.`);
-        io.observe(moreBtn);
-    });       
+    const res = await getdata.createGalleryPage();            
+    if (res) Notiflix.Notify.success(`Hooray! We found ${getdata.totalHits} images.`);
+        io.observe(moreBtn);          
 }
 
-function getNextImages(e) {
+async function getNextImages(e) {
     page += 1;
     if (page > getdata.totalPages) {
         Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
@@ -40,8 +42,8 @@ function getNextImages(e) {
         return;
     }    
     getdata.page = page;     
-    getdata.createGalleryPage()
-    .then(scrollDown);    
+    const res = await getdata.createGalleryPage();
+    scrollDown();    
 }
 
 function scrollDown() {    
