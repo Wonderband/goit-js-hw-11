@@ -1,11 +1,11 @@
 import axios from 'axios';
-import createGallery from './templates/image-card.hbs';
+import createGallery from '../templates/image-card.hbs';
 import Notiflix from 'notiflix';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
-
 const perPage = 40;
+
 export class GetDataFromPixabay {
     constructor(query, pageNumber, btn, galleryEl) {
         this.url = "https://pixabay.com/api/";        
@@ -21,9 +21,9 @@ export class GetDataFromPixabay {
         this.moreBtn = btn; 
         this.gallery = galleryEl;
     }
+
     createGalleryPage() {        
-        const pageTempl = `page=${this.page}`;
-        return getPhotos(`${this.url}?${pageTempl}&${this.config}`)
+        return getPhotos(`${this.url}?page=${this.page}&${this.config}`)
         .then(responce => {            
             const resultArray = responce.data.hits;                
             if (!resultArray.length) {
@@ -37,15 +37,16 @@ export class GetDataFromPixabay {
             })
         .then(photos => {                    
             this.gallery.insertAdjacentHTML("beforeend", createGallery(photos));
-            const lightbox = new SimpleLightbox('.gallery a', 
-            {captions: true, captionsData: 'alt', captionDelay: 250});
+            const lightbox = new SimpleLightbox('.gallery a', {
+                captions: true, captionsData: 'alt', captionDelay: 250
+            });
             return true;                   
             })
         .catch(err => {            
             Notiflix.Notify.failure(`${err.message}`);  
             return false;          
         });
-    }    
+    }
 }
 
 async function getPhotos(request) {
