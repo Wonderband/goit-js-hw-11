@@ -6,21 +6,35 @@
     --animation-duration: 250ms;
   }
 
-// .container {
-//   max-width: 1200px;
-//   padding: 5px;
-//   margin-left: auto;
-//   margin-right: auto;
-
-// }
   
+
+.container {
+  // max-width: 1200px;
+  position: relative;
+  padding: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  outline: 1px solid red;
+
+}
+
+.search-form {
+  display: flex;
+  background-color: blue;
+  height: 60px;
+  padding: 10px 0;
+  justify-content: center;
+  margin-bottom: 5px;
+  // align-items: center;  
+}
+
   .gallery {
     display: flex;
     justify-content: left;
     // max-width: 1140px;
     gap: 10px;
     flex-wrap: wrap;
-    padding: 15px;
+    // padding: 15px;
     margin-left: auto;
     margin-right: auto;
     // outline: 10px solid red;
@@ -31,13 +45,14 @@
     // justify-content: center;
     // margin-left: auto;
     // margin-right: auto;
-  }
-
-  
+  }  
 
   .photo-card {
-    border: 1px black solid;
+    // border: 1px black solid;
     flex-basis: calc((100% - 30px) / 4);
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
+      0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+    transition: transform var(--animation-duration) var(--timing-function);
   }
 
   .link-card {
@@ -45,11 +60,9 @@
     height: 300px;
   }
 
-  .photo-card:hover {
+  .photo-card:hover {    
     transform: scale(1.03);
-  }
-
-  
+  }  
 
   .img-card {
     width: 100%;
@@ -69,14 +82,28 @@
     align-items: center;  
   }
 
+  .load-more {
+    // display: block;
+    margin-top: 10px;    
+    height: 40px;
+    background-color: blue;
+    color:white;
+    text-transform: uppercase;
+    border-radius: 5%;
+    position: absolute;
+    left: 50%;    
+    transform: translateX(-50%);
+    
+    
+  }
+
   // .img-card {
   //   max-width: 200px;
   // }
   
 //   .gallery__item {
 //     position: relative;
-//     box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
-//       0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+    
 //   }
   
 //   .gallery__image:hover {

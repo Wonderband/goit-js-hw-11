@@ -7,9 +7,11 @@ const moreBtn = document.querySelector('.load-more');
 
 searchForm.addEventListener('submit', getNewImages);
 moreBtn.addEventListener('click', getNextImages);
+// document.addEventListener('scroll', onScroll);
 
 let page = 1;
 let getdata;
+
 
 function getNewImages(e) {
     e.preventDefault();   
@@ -18,9 +20,11 @@ function getNewImages(e) {
     galleryEl.innerHTML = '';  
     moreBtn['hidden'] = true;
     getdata = new GetDataFromPixabay(searchQuery, page, moreBtn, galleryEl);
-    getdata.createGalleryPage().then(res => {        
+    getdata.createGalleryPage().then(res => {  
+        onScroll();       
         if (res) Notiflix.Notify.success(`Hooray! We found ${getdata.totalHits} images.`);
-    });    
+    }); 
+      
 }
 
 function getNextImages(e) {
@@ -33,3 +37,12 @@ function getNextImages(e) {
     getdata.page = page;     
     getdata.createGalleryPage();
 }
+
+function onScroll() {
+    console.log('hello');
+    window.scrollBy({
+        top: 600,
+        behavior: "smooth",
+      });
+}
+
